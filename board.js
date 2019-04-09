@@ -31,6 +31,7 @@ class Board {
         console.log("Valid move");
         // time to flip pieces
         flip = true;
+        this.flipDirection(x, y, x2, y2, color);
 
       }
     }
@@ -83,8 +84,21 @@ class Board {
       }
     return false;
   }
-  flipDirection(x, y, dx, dy, color) {
-
+  /*
+  Currently assumes valid direction, as only called if direction is valid
+  */
+  flipDirection(x1, y1, x2, y2, color) {
+    console.log("HERE");
+    let direction = getDirection(x1, y1, x2, y2);
+    let opp = oppColor(color);
+    let curr = {x:x2, y:y2};
+    while( curr.x >= 0 && curr.x < this.layout.length &&
+      curr.y >=0 && curr.y < this.layout.length && this.layout[curr.x][curr.y] == opp) {
+        console.log("HERE");
+        this.layout[curr.x][curr.y] = color;
+        curr.x = curr.x + direction.x;
+        curr.y = curr.y + direction.y;
+      }
   }
 }
 
