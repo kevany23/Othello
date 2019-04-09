@@ -5,30 +5,37 @@ Testing separation of concerns to the max
 class Board {
   constructor(layout) {
     this.layout = layout;
+    this.cpu = new CPU(this.layout);
   }
   handleClick(x, y) {
     if (this.checkValid(x, y, "b") == -1) {
       return;
     }
     this.addPiece(x, y, "b");
+    // add computer piece
+    let move = this.cpu.randomMove();
+    if (!this.cpu.ai) {
+      let move = this.cpu.randomMove();
+      while(this.checkValid(move.x, move.y, "w") == -1) {
+        move = this.cpu.randomMove();
+      }
+      this.addPiece(move.x, move.y, "w");
+    }
   }
   /*
   TODO: also needs to check if can flip pieces
   */
   checkValid(x, y, color) {
     if (this.layout[x][y] != "x") {
-      console.log("Invalid move");
       return -1;
     }
     // now check if can flip pieces
     let adjList = this.getAdjacents(x, y, color);
-    console.log(adjList);
     let flip = false;
     for(let i = 0; i < adjList.length; i++) {
       let x2 = adjList[i].x;
       let y2 = adjList[i].y;
       if (this.checkDirection(x, y, x2, y2, color)) {
-        console.log("Valid move");
         // time to flip pieces
         flip = true;
         this.flipDirection(x, y, x2, y2, color);
@@ -38,7 +45,6 @@ class Board {
     if (flip) {
       return 1;
     }
-    console.log("Invalid move");
     return -1;
   }
   getLayout() {
@@ -88,17 +94,22 @@ class Board {
   Currently assumes valid direction, as only called if direction is valid
   */
   flipDirection(x1, y1, x2, y2, color) {
-    console.log("HERE");
     let direction = getDirection(x1, y1, x2, y2);
     let opp = oppColor(color);
     let curr = {x:x2, y:y2};
     while( curr.x >= 0 && curr.x < this.layout.length &&
       curr.y >=0 && curr.y < this.layout.length && this.layout[curr.x][curr.y] == opp) {
-        console.log("HERE");
         this.layout[curr.x][curr.y] = color;
         curr.x = curr.x + direction.x;
         curr.y = curr.y + direction.y;
       }
+  }
+  setCPURandom() {
+    this.cpu.setRandomMode();
+  }
+
+  setCPUAI() {
+    this.cpu.setAIMode();
   }
 }
 

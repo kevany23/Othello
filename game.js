@@ -113,3 +113,7 @@ function drawPieces() {
     }
   }
 }
+
+function setRandom() {
+  gameBoard.setCPURandom();
+}
