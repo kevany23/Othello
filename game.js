@@ -33,7 +33,6 @@ function loadGame() {
   a[3][4] = "w";
   a[4][3] = "w";
   gameBoard = new Board(a);
-  console.log(gameBoard.getLayout());
   drawPieces();
 }
 
@@ -43,11 +42,9 @@ storing data on pieces
 */
 
 function onCanvasClick(event) {
-  //console.log(event);
   let x = event.offsetX;
   let y = event.offsetY;
   var pos = getPosition(x, y);
-  console.log("x: " + pos.x + "\ty: " + pos.y);
   var valid = gameBoard.handleClick(pos.x, pos.y);
   if (valid == -1) {
     return;
