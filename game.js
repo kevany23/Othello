@@ -50,6 +50,16 @@ function onCanvasClick(event) {
     return;
   }
   updateBoard();
+  var result = gameBoard.checkWin("b");
+  if(result == -1) {
+    return;
+  }
+  else if (result == "w") {
+    console.log("White wins!");
+  }
+  else if (result == "b") {
+    console.log("Black wins!");
+  }
 }
 
 function getPosition(x, y) {
