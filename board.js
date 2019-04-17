@@ -5,7 +5,7 @@ Testing separation of concerns to the max
 class Board {
   constructor(layout) {
     this.layout = layout;
-    this.cpu = new CPU(this.layout);
+    this.cpu = new CPU(this.layout, "w");
     this.randomMode = true;
   }
   handleClick(x, y) {
@@ -15,14 +15,7 @@ class Board {
     this.addPiece(x, y, "b");
     // add computer piece
     if (this.randomMode) {
-      let moves = this.checkAvailableMoves("w");
-      if (moves.length == 0) {
-        console.log("Out of moves for CPU");
-        return;
-      }
-      let index = Math.floor(Math.random()*moves.length);
-      this.checkValid(moves[index].x, moves[index].y, "w");
-      this.addPiece(moves[index].x, moves[index].y, "w");
+      this.randomMove("w"); 
     }
     else {
       // ai move
@@ -169,7 +162,6 @@ class Board {
         }
       }
     }
-    console.log(array);
     return array;
   }
   getWinner() {
@@ -196,6 +188,16 @@ class Board {
       else {
         return 0
       }
+  }
+  randomMove(color) {
+    let moves = this.checkAvailableMoves(color);
+      if (moves.length == 0) {
+        console.log("Out of moves for CPU");
+        return;
+      }
+      let index = Math.floor(Math.random()*moves.length);
+      this.checkValid(moves[index].x, moves[index].y, color);
+      this.addPiece(moves[index].x, moves[index].y, color);
   }
 }
 
