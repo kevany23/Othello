@@ -3,20 +3,13 @@ class CPU {
         console.log("YO");
         this.layout = layout;
         this.ai = false;
+        this.makeMove = this.randomMove;
     }
     setRandomMode() {
         this.ai = false;
     }
     setAIMode() {
         this.ai = true;
-    }
-    makeMove() {
-        if (this.ai) {
-            return randomMove();
-        }
-        else {
-
-        }
     }
     /*
     Return x, y of selected position

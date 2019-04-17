@@ -6,6 +6,7 @@ class Board {
   constructor(layout) {
     this.layout = layout;
     this.cpu = new CPU(this.layout);
+    this.randomMode = true;
   }
   handleClick(x, y) {
     if (this.checkValid(x, y, "b") == -1) {
@@ -13,13 +14,18 @@ class Board {
     }
     this.addPiece(x, y, "b");
     // add computer piece
-    let move = this.cpu.randomMove();
-    if (!this.cpu.ai) {
-      let move = this.cpu.randomMove();
-      while (this.checkValid(move.x, move.y, "w") == -1) {
-        move = this.cpu.randomMove();
+    if (this.randomMode) {
+      let moves = this.checkAvailableMoves("w");
+      if (moves.length == 0) {
+        console.log("Out of moves for CPU");
+        return;
       }
-      this.addPiece(move.x, move.y, "w");
+      let index = Math.floor(Math.random()*moves.length);
+      this.checkValid(moves[index].x, moves[index].y, "w");
+      this.addPiece(moves[index].x, moves[index].y, "w");
+    }
+    else {
+      // ai move
     }
   }
   /*
@@ -126,11 +132,11 @@ class Board {
     }
   }
   setCPURandom() {
-    this.cpu.setRandomMode();
+    this.randomMode = true;
   }
 
   setCPUAI() {
-    this.cpu.setAIMode();
+    this.randomMode = false;
   }
   /*
   Check if there is a winner
@@ -158,11 +164,12 @@ class Board {
     var array = []
     for(let i = 0; i < this.layout.length; i++) {
       for(let j = 0; j < this.layout[i].length; j++) {
-        if(this.checkValid2(i, j, color)) {
+        if(this.checkValid2(i, j, color) != -1) {
           array.push({x:i, y:j});
         }
       }
     }
+    console.log(array);
     return array;
   }
   getWinner() {

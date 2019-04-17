@@ -125,5 +125,9 @@ function drawPieces() {
 }
 
 function setRandom() {
-  gameBoard.setCPURandom();
+  if( typeof gameBoard !== "undefined") gameBoard.setCPURandom();
+}
+
+function setAI() {
+  if( typeof gameBoard !== "undefined") gameBoard.setCPUAI();
 }
