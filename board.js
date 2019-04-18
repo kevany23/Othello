@@ -100,13 +100,18 @@ class Board {
     let curr = {};
     curr.x = x2;
     curr.y = y2;
+    var count = 0;
     while (curr.x >= 0 && curr.x < this.layout.length &&
       curr.y >= 0 && curr.y < this.layout.length) {
-      if (this.layout[curr.x][curr.y] == color) {
+      if (this.layout[curr.x][curr.y] == color && count > 0) {
         return true;
+      }
+      else if (this.layout[curr.x][curr.y] == 'x') {
+        return false;
       }
       curr.x = curr.x + direction.x;
       curr.y = curr.y + direction.y;
+      count++;
     }
     return false;
   }
