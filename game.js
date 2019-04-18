@@ -33,6 +33,7 @@ function loadGame() {
   a[3][4] = "w";
   a[4][3] = "w";
   gameBoard = new Board(a);
+  gameBoard.cpu = new CPU(gameBoard.layout, "w");
   drawPieces();
 }
 
