@@ -20,7 +20,8 @@ class Board {
     else {
       // ai move
       this.cpu = new CPU(this.layout, "w");
-      var move = this.cpu.makeMove()
+      var move = this.cpu.makeMove();
+      this.checkValid(move.x, move.y, "w");
       this.addPiece(move.x, move.y, "w");
     }
   }
@@ -201,7 +202,7 @@ class Board {
   randomMove(color) {
     let moves = this.checkAvailableMoves(color);
       if (moves.length == 0) {
-        console.log("Out of moves for CPU");
+        //console.log("Out of moves for CPU");
         return -1;
       }
       let index = Math.floor(Math.random()*moves.length);

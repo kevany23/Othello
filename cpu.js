@@ -1,4 +1,4 @@
-const MCTS_TIMER = 6000;
+const MCTS_TIMER = 3000;
 var date = new Date();
 
 /*
@@ -12,7 +12,6 @@ class CPU {
         this.color = color;
     }
     makeMove() {
-        //console.log(this.layout);
         var root = new Node(this.layout, null, null, this.color);
         date = new Date();
         var startTime = date.getTime();
@@ -20,18 +19,13 @@ class CPU {
         var currTime = date.getTime();
         while(currTime - startTime < MCTS_TIMER) {
             var leaf = this.traverse(root);
-            console.log("Leaf:");
-            console.log(leaf);
             var result = leaf.rollout();
-            console.log("backing up");
             this.backPropogate(leaf, result);
-            console.log("Line 27");
 
             date = new Date();
             currTime = date.getTime();
         }
         //select best child of root
-        console.log("End of time");
         let maxScore = root.children[0].wins / root.children[0].matches;
         let maxIndex = 0;
         for(let i = 1; i < root.children.length; i++) {
@@ -45,8 +39,9 @@ class CPU {
     }
     traverse(node) {
         while(node != null) {
-            console.log("Node:");
-            console.log(node);
+            if(node.moveList.length == 0) {
+                return node;
+            }
             if (!node.fullyExpanded()) {
                 //expand
                 return this.expand(node);
@@ -94,14 +89,11 @@ class Node {
         this.children = [];
         this.parent = parent;
         this.color = color;
-        console.log(this.color);
         if (move != null) this.layout[move.x][move.y] = color;
+        this.move = move;
         this.board = new Board(this.layout);
         // get list (and number) of possible moves
-        console.log(this.board.layout);
         this.moveList = this.board.checkAvailableMoves(this.color);
-        console.log("Movelist:")
-        console.log(this.moveList);
         this.wins = 0;
         this.matches = 0;
     }
@@ -122,7 +114,6 @@ class Node {
             if (move2 == -1) break;
             result = this.board.checkWin();
         }
-        console.log("Finished rollout");
         return result
     }
     /*
